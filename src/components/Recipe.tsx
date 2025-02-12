@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import firebaseConfig from '../firebaseConfig';
 
-interface Recipe {
+interface RecipeData {
   id: string;
   image_url: string;
   title: string;
@@ -20,7 +20,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [recipe, setRecipe] = useState<RecipeData | null>(null);
 
   useEffect(() => {
     const getRecipe = async () => {
@@ -30,7 +30,7 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
           const data = snapshot.val();
           //console.log('Data from Firebase:', data); // Adicionando log para verificar os dados
           if (data) {
-            const filteredId = data.filter((item: Recipe) => item.id === recipeId);
+            const filteredId = data.filter((item: RecipeData) => item.id === recipeId);
             if (filteredId.length > 0) {
               setRecipe(filteredId[0]);
               resolve();

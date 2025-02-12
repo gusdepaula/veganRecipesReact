@@ -11,14 +11,13 @@ interface Recipe {
 }
 
 interface ResultsProps {
-  recipes: Recipe[];
   onSelectRecipe: (recipeId: string) => void;
 }
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const Results: React.FC<ResultsProps> = ({ recipes, onSelectRecipe }) => {
+const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
   const [searchInput, setSearchInput] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [resultsPerPage] = useState(10);
@@ -26,7 +25,7 @@ const Results: React.FC<ResultsProps> = ({ recipes, onSelectRecipe }) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
-    // console.log(`Search input: ${e.target.value}`);
+    //console.log(`Search input: ${e.target.value}`);
   };
 
   const getResults = async (query: string): Promise<Recipe[]> => {
@@ -36,11 +35,11 @@ const Results: React.FC<ResultsProps> = ({ recipes, onSelectRecipe }) => {
         dataRef,
         snapshot => {
           const data = snapshot.val();
-          console.log('Data from Firebase:', data); // Adicionando console.log para verificar os dados
-          if (data && data.data) {
+          console.log('Data from Firebase:', data);
+          if (data) {
             const filteredQuery = data.data
               .map((item: Recipe, index: number) => ({
-                id: index.toString(),
+                uniqueId: index.toString(), // Evita sobrescrever 'id'
                 ...item,
               }))
               .filter((item: Recipe) => item.title && item.title.toLowerCase().includes(query.toLowerCase()));
@@ -71,25 +70,6 @@ const Results: React.FC<ResultsProps> = ({ recipes, onSelectRecipe }) => {
       console.log('Search results:', results);
     } catch (error) {
       console.error('Error fetching data:', error);
-    }
-  };
-
-  const clearInput = () => {
-    setSearchInput('');
-  };
-
-  const clearResults = () => {
-    setSearchResults([]);
-  };
-
-  const highlightSelected = (id: string) => {
-    const resultsArr = Array.from(document.querySelectorAll('.results__link'));
-    resultsArr.forEach(el => {
-      el.classList.remove('results__link--active');
-    });
-    const selectedElement = document.querySelector(`.results__link[href*="${id}"]`);
-    if (selectedElement) {
-      selectedElement.classList.add('results__link--active');
     }
   };
 
