@@ -141,7 +141,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
   };
 
   return (
-    <div className="results hidden-xs">
+    <div className="results">
       <form className="search" onSubmit={handleSubmit}>
         <div className="input-group">
           <input
