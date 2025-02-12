@@ -83,7 +83,7 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
             return (
               <li key={index} className="recipe__item">
                 <svg className="recipe__icon">
-                  <use href="../../public/icons.svg#icon-check"></use>
+                  <use href="/icons.svg#icon-check"></use>
                 </svg>
                 <div className="recipe__ingredient">{ing}</div>
               </li>

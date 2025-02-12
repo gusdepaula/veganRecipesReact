@@ -109,7 +109,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
     >
       <span>Página {type === 'prev' ? page - 1 : page + 1}</span>
       <svg className="search__icon">
-        <use href={`../../public/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}`}></use>
+        <use href={`..//icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}`}></use>
       </svg>
     </button>
   );
@@ -154,7 +154,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
           <span className="input-group-btn">
             <button className="btn search__btn" onClick={handleSubmit}>
               <svg className="search__icon">
-                <use href="../public/icons.svg#icon-magnifying-glass"></use>
+                <use href="/icons.svg#icon-magnifying-glass"></use>
               </svg>
             </button>
           </span>
