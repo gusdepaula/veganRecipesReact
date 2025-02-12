@@ -12,12 +12,13 @@ interface Recipe {
 
 interface ResultsProps {
   recipes: Recipe[];
+  onSelectRecipe: (recipeId: string) => void;
 }
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const Results: React.FC<ResultsProps> = ({ recipes }) => {
+const Results: React.FC<ResultsProps> = ({ recipes, onSelectRecipe }) => {
   const [searchInput, setSearchInput] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [resultsPerPage] = useState(10);
@@ -108,7 +109,7 @@ const Results: React.FC<ResultsProps> = ({ recipes }) => {
 
   const renderRecipe = (recipe: Recipe) => (
     <li key={recipe.id}>
-      <a className="results__link" href={`#${recipe.id}`}>
+      <a className="results__link" href={`#${recipe.id}`} onClick={() => onSelectRecipe(recipe.id)}>
         <figure className="results__fig">
           <img src={recipe.image_url} alt="Test" />
         </figure>

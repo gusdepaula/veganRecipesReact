@@ -11,8 +11,17 @@ import Footer from './components/Footer';
 const app = initializeApp(firebaseConfig);
 export const db = getDatabase(app);
 
+interface Recipe {
+  id: string;
+  image_url: string;
+  title: string;
+  publisher: string;
+  ingredients: { count: number; unit: string; ingredient: string }[];
+}
+
 function App() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [selectedRecipeId, setSelectedRecipeId] = useState<string | null>(null);
 
   useEffect(() => {
     const dbRef = ref(db);
@@ -29,11 +38,15 @@ function App() {
       });
   }, []);
 
+  const handleSelectRecipe = (recipeId: string) => {
+    setSelectedRecipeId(recipeId);
+  };
+
   return (
     <div className="container">
       <Header />
-      <Results recipes={recipes} />
-      <Recipe />
+      <Results recipes={recipes} onSelectRecipe={handleSelectRecipe} />
+      {selectedRecipeId && <Recipe recipeId={selectedRecipeId} />}
       <Footer />
     </div>
   );

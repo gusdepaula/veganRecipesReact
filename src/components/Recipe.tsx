@@ -1,93 +1,99 @@
-const Recipe = () => {
+import { useState, useEffect } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, onValue } from 'firebase/database';
+import firebaseConfig from '../firebaseConfig';
+
+interface Recipe {
+  id: string;
+  image_url: string;
+  title: string;
+  publisher: string;
+  directions: string;
+  ingredients: string[];
+}
+
+interface RecipeProps {
+  recipeId: string;
+}
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
+  const [recipe, setRecipe] = useState<Recipe | null>(null);
+
+  useEffect(() => {
+    const getRecipe = async () => {
+      return new Promise<void>((resolve, reject) => {
+        const recipeRef = ref(db, 'data');
+        onValue(recipeRef, snapshot => {
+          const data = snapshot.val();
+          //console.log('Data from Firebase:', data); // Adicionando log para verificar os dados
+          if (data) {
+            const filteredId = data.filter((item: Recipe) => item.id === recipeId);
+            if (filteredId.length > 0) {
+              setRecipe(filteredId[0]);
+              resolve();
+            } else {
+              reject('Recipe not found');
+            }
+          } else {
+            reject('No data available');
+          }
+        });
+      });
+    };
+
+    getRecipe().catch(error => console.error(error));
+  }, [recipeId]);
+
+  if (!recipe) return <div>Loading...</div>;
+
+  //console.log('Recipe data:', recipe); // Adicionando log para verificar os dados da receita
+
   return (
     <div className="recipe">
       <figure className="recipe__fig">
-        <a href="/" className="btn visible-xs recipe__back">
-          « voltar
-        </a>
-        <img
-          src="https://bonali.com.br/WP/wp-content/uploads/Creme-light-de-aveia-com-banana-e-chocolate.jpg"
-          alt="Creme de banana com aveia e frutos secos"
-          className="recipe__img"
-        />
+        <img src={recipe.image_url} alt={recipe.title} className="recipe__img" />
         <h1 className="recipe__title">
-          <span>Creme de banana com aveia e frutos secos</span>
+          <span>{recipe.title}</span>
         </h1>
       </figure>
-
       <div className="recipe__details">
         <div className="recipe__info">
           <svg className="recipe__info-icon">
-            <use href="../public/icons.svg#icon-stopwatch"></use>
+            <use href="img/icons.svg#icon-stopwatch"></use>
           </svg>
-          <span className="recipe__info-data recipe__info-data--minutes">undefined</span>
-          <span className="recipe__info-text"> minutos</span>
+          <span className="recipe__info-data recipe__info-data--minutes">45</span>
+          <span className="recipe__info-text"> minutes</span>
         </div>
         <div className="recipe__info">
           <svg className="recipe__info-icon">
-            <use href="../public/icons.svg#icon-man"></use>
+            <use href="img/icons.svg#icon-man"></use>
           </svg>
-          <span className="recipe__info-data recipe__info-data--people">undefined</span>
-          <span className="recipe__info-text"> porções</span>
-
-          <div className="recipe__info-buttons">
-            <button className="btn-tiny btn-decrease">
-              <svg>
-                <use href="../public/icons.svg#icon-circle-with-minus"></use>
-              </svg>
-            </button>
-            <button className="btn-tiny btn-increase">
-              <svg>
-                <use href="../public/icons.svg#icon-circle-with-plus"></use>
-              </svg>
-            </button>
-          </div>
+          <span className="recipe__info-data recipe__info-data--people">4</span>
+          <span className="recipe__info-text"> servings</span>
         </div>
       </div>
-
       <div className="recipe__ingredients">
-        <button className="recipe__love">
-          <svg className="header__likes">
-            <use href="../public/icons.svg#icon-heart-outlined"></use>
-          </svg>
-        </button>
         <ul className="recipe__ingredient-list">
-          <li className="recipe__item">
-            <svg className="recipe__icon">
-              <use href="../public/icons.svg#icon-check"></use>
-            </svg>
-            1 banana madura
-          </li>
-
-          <li className="recipe__item">
-            <svg className="recipe__icon">
-              <use href="../public/icons.svg#icon-check"></use>
-            </svg>
-            1/2 xícara de leite de amêndoas ou outro leite de sua preferência
-          </li>
-
-          <li className="recipe__item">
-            <svg className="recipe__icon">
-              <use href="../public/icons.svg#icon-check"></use>
-            </svg>
-            3 colheres de sopa de aveia em flocos
-          </li>
-
-          <li className="recipe__item">
-            <svg className="recipe__icon">
-              <use href="../public/icons.svg#icon-check"></use>
-            </svg>
-            1 colher de sopa de frutos secos
-          </li>
+          {recipe.ingredients.map((ing, index) => {
+            if (!ing) return null; // Verificação para ignorar ingredientes vazios
+            //console.log('Ingredient:', ing); // Adicionando log para verificar os dados dos ingredientes
+            return (
+              <li key={index} className="recipe__item">
+                <svg className="recipe__icon">
+                  <use href="../../public/icons.svg#icon-check"></use>
+                </svg>
+                <div className="recipe__ingredient">{ing}</div>
+              </li>
+            );
+          })}
         </ul>
       </div>
-
       <div className="recipe__directions">
         <h2 className="heading-2">Modo de preparo</h2>
-        <p className="recipe__directions-text preWrap"></p>
-        <p className="recipe__directions-text">
-          Esta receita foi cuidadosamente desenvolvida e testada por <span className="recipe__by">Gustavo de Paula</span>.
-        </p>
+        <p className="recipe__directions-text" dangerouslySetInnerHTML={{ __html: recipe.directions }} />
       </div>
     </div>
   );
