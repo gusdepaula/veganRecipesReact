@@ -24,6 +24,16 @@ select {
   font-size: 100%;
 }
 
+body,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 body {
   font-family: 'Nunito Sans', sans-serif;
   font-weight: 400;
@@ -227,7 +237,7 @@ body {
 .search {
   background-color: #fff;
   border-radius: 10rem;
-  display: flex; /* Adicionado */
+  /* display: flex; */
   align-items: center;
   transition: all 0.3s;
   padding-left: 2rem;
@@ -240,12 +250,11 @@ body {
 }
 .search__field {
   border: none;
-  flex: 1; /* Adicionado */
   background: none;
   font-family: inherit;
   color: inherit;
   font-size: 1.7rem;
-  width: 100%;
+  width: 282px;
   display: table-cell;
   margin-bottom: 0;
   height: 3.8rem;
@@ -267,56 +276,6 @@ body {
 }
 .search__field::placeholder {
   color: #dad0cc;
-}
-
-.search__btn {
-  display: flex; /* Adicionado */
-  align-items: center; /* Adicionado */
-  justify-content: center; /* Adicionado */
-}
-
-.likes {
-  position: relative;
-  align-self: stretch;
-  padding: 0 2rem 0 0 !important;
-}
-.likes__field {
-  cursor: pointer;
-  padding: 0 4rem;
-  display: flex;
-  align-items: center;
-  height: 100%;
-  transition: all 0.3s;
-}
-.likes__field:hover {
-  background-color: #f2efee;
-}
-/* .likes__panel:hover,
-.likes__field:hover + .likes__panel {
-  visibility: visible;
-  opacity: 1;
-} */
-.likes__panel-active {
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-.likes__icon {
-  fill: #f59a83;
-  height: 3.75rem;
-  width: 3.75rem;
-}
-.likes__panel {
-  position: absolute;
-  right: 0;
-  top: 10rem;
-  z-index: 10;
-  padding: 2rem 0;
-  width: 34rem;
-  background-color: #fff;
-  box-shadow: 0 0.8rem 5rem 2rem rgba(101, 90, 86, 0.1);
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.5s 0.2s;
 }
 
 .results,
@@ -706,152 +665,4 @@ body {
 .input-group-btn,
 .input-group .form-control {
   display: table-cell;
-}
-
-@media (max-width: 767px) {
-  .container {
-    grid-template-columns: 1fr;
-    grid-template-areas: 'head' 'recipe' 'list' 'shopping' 'footer';
-  }
-  .header__logo {
-    margin-left: 2rem;
-    height: 6rem;
-  }
-  .search {
-    padding-left: 2rem;
-  }
-  .search__field {
-    width: 27.2rem;
-  }
-  .likes__field {
-    padding: 1rem;
-  }
-  .hidden-xs {
-    display: none !important;
-  }
-  .recipe__details {
-    padding: 8rem 3rem 3rem 1rem;
-  }
-  .recipe__ingredients {
-    padding: 8rem 2rem 4rem 2rem;
-    align-items: left;
-  }
-  .recipe__ingredient-list {
-    grid-template-columns: 1fr;
-  }
-  .recipe__directions-text {
-    width: 100%;
-  }
-  .results__title {
-    font-size: 3rem;
-  }
-  .visible-xs {
-    display: block !important;
-  }
-}
-
-@media only screen and (max-width: 992px) and (min-width: 768px) {
-  .container {
-    grid-template-columns: 1fr;
-    grid-template-areas: 'head' 'recipe' 'list' 'shopping' 'footer';
-  }
-  .recipe__back {
-    left: 3rem;
-  }
-  .search__field {
-    width: 100%;
-  }
-  .hidden-xs {
-    display: none !important;
-  }
-  .visible-xs {
-    display: block !important;
-  }
-}
-
-@media only screen and (max-width: 68.75em) {
-  .container {
-    width: 100%;
-    margin: 0;
-    border-radius: 0;
-  }
-}
-
-/*** iPhone and iOS Form Input Zoom Fixes ***/
-/* Fix Input Zoom on devices older than iPhone 5: */
-@media screen and (device-aspect-ratio: 2/3) {
-  select,
-  textarea,
-  input[type='text'],
-  input[type='password'],
-  input[type='datetime'],
-  input[type='datetime-local'],
-  input[type='date'],
-  input[type='month'],
-  input[type='time'],
-  input[type='week'],
-  input[type='number'],
-  input[type='email'],
-  input[type='url'] {
-    font-size: 1.6rem;
-  }
-}
-
-/* Fix Input Zoom on iPhone 5, 5C, 5S, iPod Touch 5g */
-@media screen and (device-aspect-ratio: 40/71) {
-  select,
-  textarea,
-  input[type='text'],
-  input[type='password'],
-  input[type='datetime'],
-  input[type='datetime-local'],
-  input[type='date'],
-  input[type='month'],
-  input[type='time'],
-  input[type='week'],
-  input[type='number'],
-  input[type='email'],
-  input[type='url'] {
-    font-size: 1.6rem;
-  }
-}
-
-/* Fix Input Zoom on iPhone 6, iPhone 6s, iPhone 7  */
-@media screen and (device-aspect-ratio: 375/667) {
-  select,
-  textarea,
-  input[type='text'],
-  input[type='password'],
-  input[type='datetime'],
-  input[type='datetime-local'],
-  input[type='date'],
-  input[type='month'],
-  input[type='time'],
-  input[type='week'],
-  input[type='number'],
-  input[type='email'],
-  input[type='tel'],
-  input[type='url'] {
-    font-size: 1.6rem;
-  }
-}
-
-/* Fix Input Zoom on iPhone 6 Plus, iPhone 6s Plus, iPhone 7 Plus, iPhone 8, iPhone X, XS, XS Max  */
-@media screen and (device-aspect-ratio: 9/16) {
-  select,
-  textarea,
-  input[type='text'],
-  input[type='password'],
-  input[type='datetime'],
-  input[type='datetime-local'],
-  input[type='date'],
-  input[type='month'],
-  input[type='time'],
-  input[type='week'],
-  input[type='number'],
-  input[type='email'],
-  input[type='tel'],
-  input[type='url'] {
-    font-size: 1.6rem;
-  }
 }

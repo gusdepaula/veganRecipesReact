@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import firebaseConfig from '../firebaseConfig';
+import Loader from './Loader';
+import { useLoader } from '../hooks/useLoader';
 
 interface RecipeData {
   id: string;
@@ -21,9 +23,11 @@ const db = getDatabase(app);
 
 const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
   const [recipe, setRecipe] = useState<RecipeData | null>(null);
+  const { setLoading } = useLoader();
 
   useEffect(() => {
     const getRecipe = async () => {
+      setLoading(true);
       return new Promise<void>((resolve, reject) => {
         const recipeRef = ref(db, 'data');
         onValue(recipeRef, snapshot => {
@@ -44,10 +48,12 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
       });
     };
 
-    getRecipe().catch(error => console.error(error));
-  }, [recipeId]);
+    getRecipe()
+      .catch(error => console.error(error))
+      .finally(() => setLoading(false));
+  }, [recipeId, setLoading]);
 
-  if (!recipe) return <div>Loading...</div>;
+  if (!recipe) return <Loader />;
 
   //console.log('Recipe data:', recipe); // Adicionando log para verificar os dados da receita
 

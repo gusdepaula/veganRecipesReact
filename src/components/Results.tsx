@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import firebaseConfig from '../firebaseConfig';
+import Loader from './Loader';
+import { useLoader } from '../hooks/useLoader';
 
 interface Recipe {
   id: string;
@@ -22,6 +24,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [resultsPerPage] = useState(10);
   const [searchResults, setSearchResults] = useState<Recipe[]>([]);
+  const { setLoading } = useLoader();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -63,6 +66,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     console.log(`Searching for: ${searchInput}`);
+    setLoading(true);
 
     try {
       const results = await getResults(searchInput);
@@ -70,6 +74,8 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
       console.log('Search results:', results);
     } catch (error) {
       console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -160,6 +166,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
           </span>
         </div>
       </form>
+      <Loader />
       <ul className="results__list">{renderResults(searchResults, currentPage, resultsPerPage)}</ul>
       <div className="results__pages">{renderButtons(currentPage, searchResults.length, resultsPerPage)}</div>
     </div>
