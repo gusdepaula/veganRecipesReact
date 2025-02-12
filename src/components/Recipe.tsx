@@ -24,6 +24,7 @@ const db = getDatabase(app);
 const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
   const [recipe, setRecipe] = useState<RecipeData | null>(null);
   const { setLoading } = useLoader();
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     const getRecipe = async () => {
@@ -32,7 +33,6 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
         const recipeRef = ref(db, 'data');
         onValue(recipeRef, snapshot => {
           const data = snapshot.val();
-          //console.log('Data from Firebase:', data); // Adicionando log para verificar os dados
           if (data) {
             const filteredId = data.filter((item: RecipeData) => item.id === recipeId);
             if (filteredId.length > 0) {
@@ -53,9 +53,42 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
       .finally(() => setLoading(false));
   }, [recipeId, setLoading]);
 
-  if (!recipe) return <Loader />;
+  useEffect(() => {
+    const favorites = getFavorites();
+    setIsFavorite(favorites.some((fav: RecipeData) => fav.id === recipeId));
+  }, [recipeId]);
 
-  //console.log('Recipe data:', recipe); // Adicionando log para verificar os dados da receita
+  const handleFavoriteClick = () => {
+    if (recipe) {
+      const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+      const isFavorite = favorites.some((fav: RecipeData) => fav.id === recipe.id);
+
+      if (isFavorite) {
+        const updatedFavorites = favorites.filter((fav: RecipeData) => fav.id !== recipe.id);
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+        console.log('Receita removida dos favoritos:', recipe);
+        setIsFavorite(false);
+        alert('Receita removida dos favoritos!');
+      } else {
+        favorites.push(recipe);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        console.log('Receita adicionada aos favoritos:', recipe);
+        setIsFavorite(true);
+        alert('Receita adicionada aos favoritos!');
+      }
+    }
+  };
+
+  const getFavorites = (): RecipeData[] => {
+    return JSON.parse(localStorage.getItem('favorites') || '[]');
+  };
+
+  useEffect(() => {
+    const favorites = getFavorites();
+    console.log('Lista de favoritos:', favorites);
+  }, []);
+
+  if (!recipe) return <Loader />;
 
   return (
     <div className="recipe">
@@ -85,10 +118,14 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
         </div>
       </div>
       <div className="recipe__ingredients">
+        <button className="recipe__love" onClick={handleFavoriteClick} aria-label="Adicionar aos favoritos">
+          <svg className="header__likes">
+            <use href={isFavorite ? '/icons.svg#icon-heart' : '/icons.svg#icon-heart-outlined'}></use>
+          </svg>
+        </button>
         <ul className="recipe__ingredient-list">
           {recipe.ingredients.map((ing, index) => {
-            if (!ing) return null; // Verificação para ignorar ingredientes vazios
-            //console.log('Ingredient:', ing); // Adicionando log para verificar os dados dos ingredientes
+            if (!ing) return null;
             return (
               <li key={index} className="recipe__item">
                 <svg className="recipe__icon">
