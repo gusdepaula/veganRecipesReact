@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, get } from 'firebase/database';
@@ -12,6 +12,8 @@ const app = initializeApp(firebaseConfig);
 export const db = getDatabase(app);
 
 function App() {
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+
   useEffect(() => {
     const dbRef = ref(db);
     get(dbRef)
@@ -30,7 +32,7 @@ function App() {
   return (
     <div className="container">
       <Header />
-      <Results />
+      <Results recipes={recipes} />
       <Recipe />
       <Footer />
     </div>
