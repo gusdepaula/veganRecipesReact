@@ -25,6 +25,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
   const [resultsPerPage] = useState(10);
   const [searchResults, setSearchResults] = useState<Recipe[]>([]);
   const { setLoading } = useLoader();
+  const [isHidden, setIsHidden] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -93,9 +94,14 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
     return title;
   };
 
+  const handleRecipeClick = (recipeId: string) => {
+    onSelectRecipe(recipeId);
+    setIsHidden(true); // Esconde a lista de resultados no mobile
+  };
+
   const renderRecipe = (recipe: Recipe) => (
     <li key={recipe.id}>
-      <a className="results__link" href={`#${recipe.id}`} onClick={() => onSelectRecipe(recipe.id)}>
+      <a className="results__link" href={`#${recipe.id}`} onClick={() => handleRecipeClick(recipe.id)}>
         <figure className="results__fig">
           <img src={recipe.image_url} alt="Test" />
         </figure>
@@ -147,7 +153,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
   };
 
   return (
-    <div className="results">
+    <div className={`results ${isHidden ? 'hidden-xs' : ''}`}>
       <form className="search" onSubmit={handleSubmit}>
         <div className="input-group">
           <input

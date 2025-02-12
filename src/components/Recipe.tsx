@@ -60,6 +60,9 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
   return (
     <div className="recipe">
       <figure className="recipe__fig">
+        <a href="/" className="btn visible-xs recipe__back">
+          « voltar
+        </a>
         <img src={recipe.image_url} alt={recipe.title} className="recipe__img" />
         <h1 className="recipe__title">
           <span>{recipe.title}</span>
