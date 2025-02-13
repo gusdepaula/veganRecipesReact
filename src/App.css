@@ -281,11 +281,11 @@ body {
 .likes {
   position: relative;
   align-self: stretch;
-  padding: 0 2rem 0 0 !important;
+  padding: 0 0 0 0 !important;
 }
 .likes__field {
   cursor: pointer;
-  padding: 0 4rem;
+  padding: 0 2rem;
   display: flex;
   align-items: center;
   height: 100%;
@@ -516,7 +516,7 @@ body {
   cursor: pointer;
   height: 4.5rem;
   width: 4.5rem;
-  margin-left: auto;
+  margin: 0 0 2rem auto;
   transition: all 0.2s;
   display: flex;
   align-items: center;
