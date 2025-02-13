@@ -4,6 +4,7 @@ import { getDatabase, ref, onValue } from 'firebase/database';
 import firebaseConfig from '../firebaseConfig';
 import Loader from './Loader';
 import { useLoader } from '../hooks/useLoader';
+import ImageWithFallback from './ImageWithFallback';
 
 interface RecipeData {
   id: string;
@@ -66,12 +67,14 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
       if (isFavorite) {
         const updatedFavorites = favorites.filter((fav: RecipeData) => fav.id !== recipe.id);
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+        window.dispatchEvent(new Event('storage')); // Dispara o evento de armazenamento
         console.log('Receita removida dos favoritos:', recipe);
         setIsFavorite(false);
         alert('Receita removida dos favoritos!');
       } else {
         favorites.push(recipe);
         localStorage.setItem('favorites', JSON.stringify(favorites));
+        window.dispatchEvent(new Event('storage')); // Dispara o evento de armazenamento
         console.log('Receita adicionada aos favoritos:', recipe);
         setIsFavorite(true);
         alert('Receita adicionada aos favoritos!');
@@ -96,27 +99,11 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
         <a href="/" className="btn visible-xs recipe__back">
           « voltar
         </a>
-        <img src={recipe.image_url} alt={recipe.title} className="recipe__img" />
+        <ImageWithFallback src={recipe.image_url} alt={recipe.title} className="recipe__img" fallbackSrc="/image-default.webp" />
         <h1 className="recipe__title">
           <span>{recipe.title}</span>
         </h1>
       </figure>
-      <div className="recipe__details">
-        <div className="recipe__info">
-          <svg className="recipe__info-icon">
-            <use href="img/icons.svg#icon-stopwatch"></use>
-          </svg>
-          <span className="recipe__info-data recipe__info-data--minutes">45</span>
-          <span className="recipe__info-text"> minutes</span>
-        </div>
-        <div className="recipe__info">
-          <svg className="recipe__info-icon">
-            <use href="img/icons.svg#icon-man"></use>
-          </svg>
-          <span className="recipe__info-data recipe__info-data--people">4</span>
-          <span className="recipe__info-text"> servings</span>
-        </div>
-      </div>
       <div className="recipe__ingredients">
         <button className="recipe__love" onClick={handleFavoriteClick} aria-label="Adicionar aos favoritos">
           <svg className="header__likes">

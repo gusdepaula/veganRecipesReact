@@ -22,7 +22,7 @@ function App() {
   return (
     <LoaderProvider>
       <div className="container">
-        <Header />
+        <Header onSelectRecipe={handleSelectRecipe} />
         <Results onSelectRecipe={handleSelectRecipe} />
         {selectedRecipeId && <Recipe recipeId={selectedRecipeId} />}
         <Footer />

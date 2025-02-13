@@ -4,6 +4,7 @@ import { getDatabase, ref, onValue } from 'firebase/database';
 import firebaseConfig from '../firebaseConfig';
 import Loader from './Loader';
 import { useLoader } from '../hooks/useLoader';
+import ImageWithFallback from './ImageWithFallback';
 
 interface Recipe {
   id: string;
@@ -103,7 +104,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
     <li key={recipe.id}>
       <a className="results__link" href={`#${recipe.id}`} onClick={() => handleRecipeClick(recipe.id)}>
         <figure className="results__fig">
-          <img src={recipe.image_url} alt="Test" />
+          <ImageWithFallback src={recipe.image_url} alt={recipe.title} className="recipe__img" fallbackSrc="/image-default.webp" />
         </figure>
         <div className="results__data">
           <h4 className="results__name">{limitRecipeTitle(recipe.title)}</h4>
