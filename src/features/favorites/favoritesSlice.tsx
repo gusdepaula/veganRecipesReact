@@ -1,8 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FavoritesState, RecipeData } from '../../types/types';
+import { RecipeData } from '../../types';
+
+interface FavoritesState {
+  favorites: RecipeData[];
+  isResultsHidden: boolean;
+}
 
 const initialState: FavoritesState = {
   favorites: JSON.parse(localStorage.getItem('favorites') || '[]'),
+  isResultsHidden: false,
 };
 
 const favoritesSlice = createSlice({
@@ -21,9 +27,12 @@ const favoritesSlice = createSlice({
       state.favorites = action.payload;
       localStorage.setItem('favorites', JSON.stringify(state.favorites));
     },
+    setResultsHidden: (state, action: PayloadAction<boolean>) => {
+      state.isResultsHidden = action.payload;
+    },
   },
 });
 
-export const { addFavorite, removeFavorite, setFavorites } = favoritesSlice.actions;
+export const { addFavorite, removeFavorite, setFavorites, setResultsHidden } = favoritesSlice.actions;
 
 export default favoritesSlice.reducer;

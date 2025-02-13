@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ImageWithFallbackProps } from '../types/types';
+import { ImageWithFallbackProps } from '../types';
 
 const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ src, alt, className, fallbackSrc }) => {
   const [imageSrc, setImageSrc] = useState<string>(src);

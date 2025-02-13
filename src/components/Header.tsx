@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux'; // Importe os hooks
-import { RootState } from '../store'; // Importe o tipo RootState
-import { setFavorites } from '../features/favorites/favoritesSlice'; // Importe a action
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store';
+import { setFavorites, setResultsHidden } from '../features/favorites/favoritesSlice';
 import ImageWithFallback from './ImageWithFallback';
-import { RecipeData, HeaderProps } from '../types/types';
+import { HeaderProps, RecipeData } from '../types';
 
 const Header: React.FC<HeaderProps> = ({ onSelectRecipe }) => {
-  const favorites = useSelector((state: RootState) => state.favorites.favorites); // Acesse o estado do Redux
-  const dispatch = useDispatch(); // Obtenha a função dispatch
+  const favorites = useSelector((state: RootState) => state.favorites.favorites);
+  const dispatch = useDispatch();
   const [isPanelActive, setIsPanelActive] = useState(false);
 
   useEffect(() => {
@@ -15,10 +15,10 @@ const Header: React.FC<HeaderProps> = ({ onSelectRecipe }) => {
       return JSON.parse(localStorage.getItem('favorites') || '[]');
     };
 
-    dispatch(setFavorites(getFavorites())); // Use dispatch para atualizar o estado do Redux
+    dispatch(setFavorites(getFavorites()));
 
     const handleStorageChange = () => {
-      dispatch(setFavorites(getFavorites())); // Use dispatch para atualizar o estado do Redux
+      dispatch(setFavorites(getFavorites()));
     };
 
     window.addEventListener('storage', handleStorageChange);
@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectRecipe }) => {
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
-  }, [dispatch]); // Adicione dispatch como dependência
+  }, [dispatch]);
 
   const handleLikesClick = () => {
     setIsPanelActive(!isPanelActive);
@@ -34,7 +34,8 @@ const Header: React.FC<HeaderProps> = ({ onSelectRecipe }) => {
 
   const handleFavoriteClick = (recipeId: string) => {
     onSelectRecipe(recipeId);
-    setIsPanelActive(false);
+    dispatch(setResultsHidden(true)); // Adiciona a classe hidden-xs na div results
+    setIsPanelActive(false); // Opcional: fecha o painel de favoritos após a seleção
   };
 
   return (

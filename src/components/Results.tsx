@@ -1,11 +1,13 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import firebaseConfig from '../firebaseConfig';
 import Loader from './Loader';
 import { useLoader } from '../hooks/useLoader';
 import ImageWithFallback from './ImageWithFallback';
-import { RecipeData, ResultsProps } from '../types/types';
+import { RecipeData, ResultsProps } from '../types';
+import { RootState } from '../store';
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
@@ -16,7 +18,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
   const [resultsPerPage] = useState(10);
   const [searchResults, setSearchResults] = useState<RecipeData[]>([]);
   const { setLoading } = useLoader();
-  const [isHidden, setIsHidden] = useState(false);
+  const isResultsHidden = useSelector((state: RootState) => state.favorites.isResultsHidden);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -87,7 +89,6 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
 
   const handleRecipeClick = (recipeId: string) => {
     onSelectRecipe(recipeId);
-    setIsHidden(true); // Esconde a lista de resultados no mobile
   };
 
   const renderRecipe = (recipe: RecipeData) => (
@@ -144,7 +145,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
   };
 
   return (
-    <div className={`results ${isHidden ? 'hidden-xs' : ''}`}>
+    <div className={`results ${isResultsHidden ? 'hidden-xs' : ''}`}>
       <form className="search" onSubmit={handleSubmit}>
         <div className="input-group">
           <input

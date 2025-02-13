@@ -5,7 +5,7 @@ import firebaseConfig from '../firebaseConfig';
 import Loader from './Loader';
 import { useLoader } from '../hooks/useLoader';
 import ImageWithFallback from './ImageWithFallback';
-import { RecipeData, RecipeProps } from '../types/types';
+import { RecipeData, RecipeProps } from '../types';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { addFavorite, removeFavorite } from '../features/favorites/favoritesSlice';
