@@ -5,7 +5,7 @@ import firebaseConfig from '../firebaseConfig';
 import Loader from './Loader';
 import { useLoader } from '../hooks/useLoader';
 import ImageWithFallback from './ImageWithFallback';
-import { RecipeData, ResultsProps } from '../types';
+import { RecipeData, ResultsProps } from '../types/types';
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
@@ -112,7 +112,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
     >
       <span>Página {type === 'prev' ? page - 1 : page + 1}</span>
       <svg className="search__icon">
-        <use href={`..//icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}`}></use>
+        <use href={`/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}`}></use>
       </svg>
     </button>
   );

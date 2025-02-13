@@ -539,6 +539,8 @@ body {
   left: 1.5rem;
   padding: 1.3rem 2rem 1.3rem 2rem;
   text-decoration: none;
+  align-items: center;
+  justify-content: center;
 }
 .recipe__ingredients {
   padding: 8rem 5rem 4rem 5rem;

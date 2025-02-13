@@ -5,7 +5,10 @@ import firebaseConfig from '../firebaseConfig';
 import Loader from './Loader';
 import { useLoader } from '../hooks/useLoader';
 import ImageWithFallback from './ImageWithFallback';
-import { RecipeData, RecipeProps } from '../types';
+import { RecipeData, RecipeProps } from '../types/types';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store';
+import { addFavorite, removeFavorite } from '../features/favorites/favoritesSlice';
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
@@ -13,7 +16,9 @@ const db = getDatabase(app);
 const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
   const [recipe, setRecipe] = useState<RecipeData | null>(null);
   const { setLoading } = useLoader();
-  const [isFavorite, setIsFavorite] = useState(false);
+  const dispatch = useDispatch(); // Obtenha a função dispatch
+  const favorites = useSelector((state: RootState) => state.favorites.favorites); // Acesse o estado de favoritos do Redux
+  const isFavorite = favorites.some((fav: RecipeData) => fav.id === recipeId); // Verifique se a receita está nos favoritos
 
   useEffect(() => {
     const getRecipe = async () => {
@@ -42,29 +47,13 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
       .finally(() => setLoading(false));
   }, [recipeId, setLoading]);
 
-  useEffect(() => {
-    const favorites = getFavorites();
-    setIsFavorite(favorites.some((fav: RecipeData) => fav.id === recipeId));
-  }, [recipeId]);
-
   const handleFavoriteClick = () => {
     if (recipe) {
-      const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-      const isFavorite = favorites.some((fav: RecipeData) => fav.id === recipe.id);
-
       if (isFavorite) {
-        const updatedFavorites = favorites.filter((fav: RecipeData) => fav.id !== recipe.id);
-        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-        window.dispatchEvent(new Event('storage')); // Dispara o evento de armazenamento
-        console.log('Receita removida dos favoritos:', recipe);
-        setIsFavorite(false);
+        dispatch(removeFavorite(recipe.id)); // Dispatch a action para remover dos favoritos
         alert('Receita removida dos favoritos!');
       } else {
-        favorites.push(recipe);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        window.dispatchEvent(new Event('storage')); // Dispara o evento de armazenamento
-        console.log('Receita adicionada aos favoritos:', recipe);
-        setIsFavorite(true);
+        dispatch(addFavorite(recipe)); // Dispatch a action para adicionar aos favoritos
         alert('Receita adicionada aos favoritos!');
       }
     }
@@ -85,7 +74,10 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
     <div className="recipe">
       <figure className="recipe__fig">
         <a href="/" className="btn visible-xs recipe__back">
-          « voltar
+          <svg>
+            <use href="/icons.svg#icon-triangle-left"></use>
+          </svg>{' '}
+          voltar
         </a>
         <ImageWithFallback src={recipe.image_url} alt={recipe.title} className="recipe__img" fallbackSrc="/image-default.webp" />
         <h1 className="recipe__title">

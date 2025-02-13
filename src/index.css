@@ -36,7 +36,7 @@
     font-size: 3rem;
   }
   .visible-xs {
-    display: block !important;
+    display: flex !important;
   }
 }
 
@@ -55,7 +55,7 @@
     display: none !important;
   }
   .visible-xs {
-    display: block !important;
+    display: flex !important;
   }
 }
 

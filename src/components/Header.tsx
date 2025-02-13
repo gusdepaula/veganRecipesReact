@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux'; // Importe os hooks
+import { RootState } from '../store'; // Importe o tipo RootState
+import { setFavorites } from '../features/favorites/favoritesSlice'; // Importe a action
 import ImageWithFallback from './ImageWithFallback';
-import { RecipeData, HeaderProps } from '../types';
+import { RecipeData, HeaderProps } from '../types/types';
 
 const Header: React.FC<HeaderProps> = ({ onSelectRecipe }) => {
-  const [favorites, setFavorites] = useState<RecipeData[]>([]);
+  const favorites = useSelector((state: RootState) => state.favorites.favorites); // Acesse o estado do Redux
+  const dispatch = useDispatch(); // Obtenha a função dispatch
   const [isPanelActive, setIsPanelActive] = useState(false);
 
   useEffect(() => {
@@ -11,10 +15,10 @@ const Header: React.FC<HeaderProps> = ({ onSelectRecipe }) => {
       return JSON.parse(localStorage.getItem('favorites') || '[]');
     };
 
-    setFavorites(getFavorites());
+    dispatch(setFavorites(getFavorites())); // Use dispatch para atualizar o estado do Redux
 
     const handleStorageChange = () => {
-      setFavorites(getFavorites());
+      dispatch(setFavorites(getFavorites())); // Use dispatch para atualizar o estado do Redux
     };
 
     window.addEventListener('storage', handleStorageChange);
@@ -22,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectRecipe }) => {
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
-  }, []);
+  }, [dispatch]); // Adicione dispatch como dependência
 
   const handleLikesClick = () => {
     setIsPanelActive(!isPanelActive);
@@ -30,7 +34,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectRecipe }) => {
 
   const handleFavoriteClick = (recipeId: string) => {
     onSelectRecipe(recipeId);
-    setIsPanelActive(false); // Opcional: fecha o painel de favoritos após a seleção
+    setIsPanelActive(false);
   };
 
   return (

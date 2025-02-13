@@ -26,3 +26,7 @@ export interface ImageWithFallbackProps {
   className?: string;
   fallbackSrc: string;
 }
+
+export interface FavoritesState {
+  favorites: RecipeData[];
+}
