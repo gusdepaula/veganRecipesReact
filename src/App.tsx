@@ -8,12 +8,14 @@ import Results from './components/Results';
 import Recipe from './components/Recipe';
 import Footer from './components/Footer';
 import { LoaderProvider } from './hooks/useLoader';
+import { RecipeData } from './types';
 
 const app = initializeApp(firebaseConfig);
 export const db = getDatabase(app);
 
 function App() {
   const [selectedRecipeId, setSelectedRecipeId] = useState<string | null>(null);
+  const [recipes] = useState<RecipeData[]>([]);
 
   const handleSelectRecipe = (recipeId: string) => {
     setSelectedRecipeId(recipeId);
@@ -23,7 +25,7 @@ function App() {
     <LoaderProvider>
       <div className="container">
         <Header onSelectRecipe={handleSelectRecipe} />
-        <Results onSelectRecipe={handleSelectRecipe} />
+        <Results recipes={recipes} onSelectRecipe={handleSelectRecipe} />
         {selectedRecipeId && <Recipe recipeId={selectedRecipeId} />}
         <Footer />
       </div>

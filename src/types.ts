@@ -1,12 +1,3 @@
-export interface Recipe {
-  id: string;
-  image_url: string;
-  title: string;
-  publisher: string;
-  directions: string;
-  ingredients: string[];
-}
-
 export interface RecipeData {
   id: string;
   image_url: string;
@@ -21,7 +12,7 @@ export interface RecipeProps {
 }
 
 export interface ResultsProps {
-  recipes: Recipe[];
+  recipes: RecipeData[];
   onSelectRecipe: (recipeId: string) => void;
 }
 

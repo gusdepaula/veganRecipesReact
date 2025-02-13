@@ -5,7 +5,7 @@ import firebaseConfig from '../firebaseConfig';
 import Loader from './Loader';
 import { useLoader } from '../hooks/useLoader';
 import ImageWithFallback from './ImageWithFallback';
-import { Recipe, ResultsProps } from '../types';
+import { RecipeData, ResultsProps } from '../types';
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
@@ -14,7 +14,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
   const [searchInput, setSearchInput] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [resultsPerPage] = useState(10);
-  const [searchResults, setSearchResults] = useState<Recipe[]>([]);
+  const [searchResults, setSearchResults] = useState<RecipeData[]>([]);
   const { setLoading } = useLoader();
   const [isHidden, setIsHidden] = useState(false);
 
@@ -23,7 +23,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
     //console.log(`Search input: ${e.target.value}`);
   };
 
-  const getResults = async (query: string): Promise<Recipe[]> => {
+  const getResults = async (query: string): Promise<RecipeData[]> => {
     return new Promise((resolve, reject) => {
       const dataRef = ref(db);
       onValue(
@@ -33,11 +33,11 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
           console.log('Data from Firebase:', data);
           if (data) {
             const filteredQuery = data.data
-              .map((item: Recipe, index: number) => ({
+              .map((item: RecipeData, index: number) => ({
                 uniqueId: index.toString(), // Evita sobrescrever 'id'
                 ...item,
               }))
-              .filter((item: Recipe) => item.title && item.title.toLowerCase().includes(query.toLowerCase()));
+              .filter((item: RecipeData) => item.title && item.title.toLowerCase().includes(query.toLowerCase()));
 
             if (filteredQuery.length === 0) {
               console.log(`No results found for query: ${query}`);
@@ -90,7 +90,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
     setIsHidden(true); // Esconde a lista de resultados no mobile
   };
 
-  const renderRecipe = (recipe: Recipe) => (
+  const renderRecipe = (recipe: RecipeData) => (
     <li key={recipe.id}>
       <a className="results__link" href={`#${recipe.id}`} onClick={() => handleRecipeClick(recipe.id)}>
         <figure className="results__fig">
@@ -136,7 +136,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
     return button;
   };
 
-  const renderResults = (recipes: Recipe[], page = 1, resPerPage = 10) => {
+  const renderResults = (recipes: RecipeData[], page = 1, resPerPage = 10) => {
     const start = (page - 1) * resPerPage;
     const end = page * resPerPage;
 

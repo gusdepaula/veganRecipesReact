@@ -116,6 +116,9 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
       <div className="recipe__directions">
         <h2 className="heading-2">Modo de preparo</h2>
         <p className="recipe__directions-text" dangerouslySetInnerHTML={{ __html: recipe.directions }} />
+        <p className="recipe__directions-text">
+          Esta receita foi cuidadosamente desenvolvida e testada por <span className="recipe__by">{recipe.publisher}</span>.
+        </p>
       </div>
     </div>
   );
