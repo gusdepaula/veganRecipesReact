@@ -5,17 +5,7 @@ import firebaseConfig from '../firebaseConfig';
 import Loader from './Loader';
 import { useLoader } from '../hooks/useLoader';
 import ImageWithFallback from './ImageWithFallback';
-
-interface Recipe {
-  id: string;
-  image_url: string;
-  title: string;
-  publisher: string;
-}
-
-interface ResultsProps {
-  onSelectRecipe: (recipeId: string) => void;
-}
+import { Recipe, ResultsProps } from '../types';
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);

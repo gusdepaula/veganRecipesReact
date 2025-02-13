@@ -5,19 +5,7 @@ import firebaseConfig from '../firebaseConfig';
 import Loader from './Loader';
 import { useLoader } from '../hooks/useLoader';
 import ImageWithFallback from './ImageWithFallback';
-
-interface RecipeData {
-  id: string;
-  image_url: string;
-  title: string;
-  publisher: string;
-  directions: string;
-  ingredients: string[];
-}
-
-interface RecipeProps {
-  recipeId: string;
-}
+import { RecipeData, RecipeProps } from '../types';
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);

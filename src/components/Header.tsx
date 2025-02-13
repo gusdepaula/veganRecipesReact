@@ -1,16 +1,6 @@
 import { useState, useEffect } from 'react';
 import ImageWithFallback from './ImageWithFallback';
-
-interface RecipeData {
-  id: string;
-  image_url: string;
-  title: string;
-  publisher: string;
-}
-
-interface HeaderProps {
-  onSelectRecipe: (recipeId: string) => void;
-}
+import { RecipeData, HeaderProps } from '../types';
 
 const Header: React.FC<HeaderProps> = ({ onSelectRecipe }) => {
   const [favorites, setFavorites] = useState<RecipeData[]>([]);
