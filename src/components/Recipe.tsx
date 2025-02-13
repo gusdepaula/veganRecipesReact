@@ -110,6 +110,7 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
             <use href={isFavorite ? '/icons.svg#icon-heart' : '/icons.svg#icon-heart-outlined'}></use>
           </svg>
         </button>
+        <h2 className="heading-2">Ingredientes</h2>
         <ul className="recipe__ingredient-list">
           {recipe.ingredients.map((ing, index) => {
             if (!ing) return null;
