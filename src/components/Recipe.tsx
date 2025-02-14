@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, onValue } from 'firebase/database';
-import firebaseConfig from '../firebaseConfig';
+import { ref, onValue } from 'firebase/database';
+import { db } from '../firebaseConfig';
 import Loader from './Loader';
 import { useLoader } from '../hooks/useLoader';
 import ImageWithFallback from './ImageWithFallback';
@@ -9,9 +8,6 @@ import { RecipeData, RecipeProps } from '../types';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { addFavorite, removeFavorite } from '../features/favorites/favoritesSlice';
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
 
 const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
   const [recipe, setRecipe] = useState<RecipeData | null>(null);

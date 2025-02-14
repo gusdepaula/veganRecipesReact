@@ -1,16 +1,12 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, onValue } from 'firebase/database';
-import firebaseConfig from '../firebaseConfig';
+import { ref, onValue } from 'firebase/database';
+import { db } from '../firebaseConfig'; // Certifique-se de importar corretamente
 import Loader from './Loader';
 import { useLoader } from '../hooks/useLoader';
 import ImageWithFallback from './ImageWithFallback';
 import { RecipeData, ResultsProps } from '../types';
 import { RootState } from '../store';
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
 
 const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
   const [searchInput, setSearchInput] = useState('');
