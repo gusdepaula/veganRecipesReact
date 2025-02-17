@@ -7,7 +7,7 @@ import ImageWithFallback from './ImageWithFallback';
 import { RecipeData, RecipeProps } from '../types';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
-import { addFavorite, removeFavorite } from '../features/favorites/favoritesSlice';
+import { addFavorite, removeFavorite, setResultsHidden } from '../features/favorites/favoritesSlice';
 
 const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
   const [recipe, setRecipe] = useState<RecipeData | null>(null);
@@ -55,6 +55,11 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
     }
   };
 
+  const handleBackClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    dispatch(setResultsHidden(false)); // Remove a classe hidden-xs da div results
+  };
+
   const getFavorites = (): RecipeData[] => {
     return JSON.parse(localStorage.getItem('favorites') || '[]');
   };
@@ -69,7 +74,7 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
   return (
     <div className="recipe">
       <figure className="recipe__fig">
-        <a href="/" className="btn visible-xs recipe__back">
+        <a href="/" className="btn visible-xs recipe__back" onClick={handleBackClick}>
           <svg>
             <use href="/icons.svg#icon-triangle-left"></use>
           </svg>{' '}

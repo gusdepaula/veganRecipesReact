@@ -2,6 +2,11 @@
   .container {
     grid-template-columns: 1fr !important;
     margin: auto !important;
+    grid-template-areas:
+      'head'
+      'list'
+      'recipe'
+      'footer' !important;
   }
   .header__logo {
     margin-left: 2rem;
