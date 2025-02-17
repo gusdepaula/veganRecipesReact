@@ -229,7 +229,7 @@ body {
 }
 .header__logo {
   display: block;
-  margin-left: 4rem;
+  margin-left: 2rem;
   height: 4.5rem;
 }
 @media (min-width: 300px) {

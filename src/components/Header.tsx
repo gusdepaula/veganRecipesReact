@@ -38,9 +38,16 @@ const Header: React.FC<HeaderProps> = ({ onSelectRecipe }) => {
     setIsPanelActive(false); // Opcional: fecha o painel de favoritos após a seleção
   };
 
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    onSelectRecipe(''); // Passa um ID vazio ou uma lógica para resetar a seleção de receita
+  };
+
   return (
     <header className="header">
-      <img src="/logo.png" alt="Logo" className="header__logo" />
+      <a href="/" className="header__logo" onClick={handleLogoClick}>
+        <img src="/logo.png" alt="Receitas Veganas" className="header__logo" />
+      </a>
       <div className="likes" onClick={handleLikesClick}>
         <div className="likes__field" style={{ visibility: favorites.length > 0 ? 'visible' : 'hidden' }}>
           <svg className="likes__icon">
