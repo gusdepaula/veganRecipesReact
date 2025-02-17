@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { ref, onValue } from 'firebase/database';
 import { db } from '../firebaseConfig'; // Certifique-se de importar corretamente
 import Loader from './Loader';
@@ -7,6 +7,7 @@ import { useLoader } from '../hooks/useLoader';
 import ImageWithFallback from './ImageWithFallback';
 import { RecipeData, ResultsProps } from '../types';
 import { RootState } from '../store';
+import { setResultsHidden } from '../features/favorites/favoritesSlice';
 
 const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
   const [searchInput, setSearchInput] = useState('');
@@ -15,6 +16,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
   const [searchResults, setSearchResults] = useState<RecipeData[]>([]);
   const { setLoading } = useLoader();
   const isResultsHidden = useSelector((state: RootState) => state.favorites.isResultsHidden);
+  const dispatch = useDispatch();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -84,6 +86,8 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
   };
 
   const handleRecipeClick = (recipeId: string) => {
+    console.log(`Recipe clicked: ${recipeId}`);
+    dispatch(setResultsHidden(true)); // Adiciona a classe hidden-xs na div results
     onSelectRecipe(recipeId);
   };
 
