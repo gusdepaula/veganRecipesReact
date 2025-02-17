@@ -12,9 +12,11 @@ import store from './store'; // Importe a sua store
 function App() {
   const [selectedRecipeId, setSelectedRecipeId] = useState<string | null>(null);
   const [recipes] = useState<RecipeData[]>([]);
+  const [isRecipeHidden, setIsRecipeHidden] = useState(true);
 
   const handleSelectRecipe = (recipeId: string) => {
     setSelectedRecipeId(recipeId);
+    setIsRecipeHidden(false); // Remove a classe hidden-xs da div recipe
   };
 
   return (
@@ -23,7 +25,7 @@ function App() {
         <div className="container">
           <Header onSelectRecipe={handleSelectRecipe} />
           <Results recipes={recipes} onSelectRecipe={handleSelectRecipe} />
-          {selectedRecipeId && <Recipe recipeId={selectedRecipeId} />}
+          {selectedRecipeId && <Recipe recipeId={selectedRecipeId} isHidden={isRecipeHidden} setIsHidden={setIsRecipeHidden} />}
           <Footer />
         </div>
       </LoaderProvider>

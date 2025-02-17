@@ -9,6 +9,8 @@ export interface RecipeData {
 
 export interface RecipeProps {
   recipeId: string;
+  isHidden: boolean;
+  setIsHidden: (isHidden: boolean) => void;
 }
 
 export interface ResultsProps {

@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { addFavorite, removeFavorite, setResultsHidden } from '../features/favorites/favoritesSlice';
 
-const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
+const Recipe: React.FC<RecipeProps> = ({ recipeId, isHidden, setIsHidden }) => {
   const [recipe, setRecipe] = useState<RecipeData | null>(null);
   const { setLoading } = useLoader();
   const dispatch = useDispatch(); // Obtenha a função dispatch
@@ -57,6 +57,7 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
 
   const handleBackClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
+    setIsHidden(true); // Adiciona a classe hidden-xs
     dispatch(setResultsHidden(false)); // Remove a classe hidden-xs da div results
   };
 
@@ -72,7 +73,7 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
   if (!recipe) return <Loader />;
 
   return (
-    <div className="recipe">
+    <div className={`recipe ${isHidden ? 'hidden-xs' : ''}`}>
       <figure className="recipe__fig">
         <a href="/" className="btn visible-xs recipe__back" onClick={handleBackClick}>
           <svg>
