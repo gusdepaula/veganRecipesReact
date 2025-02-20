@@ -8,6 +8,7 @@ import { RecipeData, RecipeProps } from '../types';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { addFavorite, removeFavorite, setResultsHidden } from '../features/favorites/favoritesSlice';
+import { toast } from 'react-toastify';
 
 const Recipe: React.FC<RecipeProps> = ({ recipeId, isHidden, setIsHidden }) => {
   const [recipe, setRecipe] = useState<RecipeData | null>(null);
@@ -47,10 +48,10 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId, isHidden, setIsHidden }) => {
     if (recipe) {
       if (isFavorite) {
         dispatch(removeFavorite(recipe.id)); // Dispatch a action para remover dos favoritos
-        alert('Receita removida dos favoritos!');
+        toast.error('Receita removida dos favoritos!');
       } else {
         dispatch(addFavorite(recipe)); // Dispatch a action para adicionar aos favoritos
-        alert('Receita adicionada aos favoritos!');
+        toast.success('Receita adicionada aos favoritos!');
       }
     }
   };

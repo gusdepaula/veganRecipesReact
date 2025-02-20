@@ -8,6 +8,8 @@ import { LoaderProvider } from './hooks/useLoader';
 import { RecipeData } from './types';
 import { Provider } from 'react-redux'; // Importe o Provider
 import store from './store'; // Importe a sua store
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [selectedRecipeId, setSelectedRecipeId] = useState<string | null>(null);
@@ -27,6 +29,7 @@ function App() {
           <Results recipes={recipes} onSelectRecipe={handleSelectRecipe} />
           {selectedRecipeId && <Recipe recipeId={selectedRecipeId} isHidden={isRecipeHidden} setIsHidden={setIsRecipeHidden} />}
           <Footer />
+          <ToastContainer />
         </div>
       </LoaderProvider>
     </Provider>
