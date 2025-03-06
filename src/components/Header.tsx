@@ -41,6 +41,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectRecipe }) => {
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
     onSelectRecipe(''); // Passa um ID vazio ou uma lógica para resetar a seleção de receita
+    dispatch(setResultsHidden(false)); // Remove a classe hidden-xs da div results
   };
 
   return (
