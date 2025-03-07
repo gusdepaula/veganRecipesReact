@@ -25,7 +25,8 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId, isHidden, setIsHidden }) => {
         onValue(recipeRef, snapshot => {
           const data = snapshot.val();
           if (data) {
-            const filteredId = data.filter((item: RecipeData) => item.id === recipeId);
+            const recipesArray = Object.values(data) as RecipeData[];
+            const filteredId = recipesArray.filter((item: RecipeData) => item.id === recipeId);
             if (filteredId.length > 0) {
               setRecipe(filteredId[0]);
               resolve();

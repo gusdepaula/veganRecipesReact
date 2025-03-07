@@ -20,24 +20,19 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
-    //console.log(`Search input: ${e.target.value}`);
   };
 
   const getResults = async (query: string): Promise<RecipeData[]> => {
     return new Promise((resolve, reject) => {
-      const dataRef = ref(db);
+      const dataRef = ref(db, 'data');
       onValue(
         dataRef,
         snapshot => {
           const data = snapshot.val();
           console.log('Data from Firebase:', data);
           if (data) {
-            const filteredQuery = data.data
-              .map((item: RecipeData, index: number) => ({
-                uniqueId: index.toString(), // Evita sobrescrever 'id'
-                ...item,
-              }))
-              .filter((item: RecipeData) => item.title && item.title.toLowerCase().includes(query.toLowerCase()));
+            const recipesArray = Object.values(data) as RecipeData[];
+            const filteredQuery = recipesArray.filter((item: RecipeData) => item.title.toLowerCase().includes(query.toLowerCase()));
 
             if (filteredQuery.length === 0) {
               console.log(`No results found for query: ${query}`);
@@ -45,6 +40,7 @@ const Results: React.FC<ResultsProps> = ({ onSelectRecipe }) => {
 
             resolve(filteredQuery);
           } else {
+            console.log('No data available');
             resolve([]);
           }
         },
