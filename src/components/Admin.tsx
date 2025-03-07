@@ -63,7 +63,7 @@ const Admin: React.FC = () => {
         </div>
         <div>
           <label htmlFor="image_url">URL da Imagem</label>
-          <input type="text" id="image_url" name="image_url" value={recipe.image_url} onChange={handleChange} required />
+          <input type="text" id="image_url" name="image_url" value={recipe.image_url} onChange={handleChange} />
         </div>
         <div>
           <label htmlFor="publisher">Publicador</label>
