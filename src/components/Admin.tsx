@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { db } from '../firebaseConfig'; // Importe a configuração do Firebase
 import { ref, push, set } from 'firebase/database'; // Ou use Firestore se preferir
 import { RecipeData } from '../types';
+import { toast, ToastContainer } from 'react-toastify';
 
 const Admin: React.FC = () => {
   const [recipe, setRecipe] = useState<RecipeData>({
@@ -21,6 +22,14 @@ const Admin: React.FC = () => {
     }));
   };
 
+  const handleIngredientsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = e.target;
+    setRecipe(prevRecipe => ({
+      ...prevRecipe,
+      ingredients: value.split(',').map(ing => ing.trim()),
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -29,7 +38,7 @@ const Admin: React.FC = () => {
         ...recipe,
         id: newRecipeRef.key,
       });
-      alert('Receita cadastrada com sucesso!');
+      toast.success('Receita cadastrada com sucesso!');
       setRecipe({
         id: '',
         image_url: '',
@@ -40,7 +49,7 @@ const Admin: React.FC = () => {
       });
     } catch (error) {
       console.error('Erro ao cadastrar receita:', error);
-      alert('Erro ao cadastrar receita. Tente novamente.');
+      toast.error('Erro ao cadastrar receita. Tente novamente.');
     }
   };
 
@@ -66,17 +75,11 @@ const Admin: React.FC = () => {
         </div>
         <div>
           <label htmlFor="ingredients">Ingredientes (separados por vírgula)</label>
-          <input
-            type="text"
-            id="ingredients"
-            name="ingredients"
-            value={recipe.ingredients.join(', ')}
-            onChange={e => setRecipe({ ...recipe, ingredients: e.target.value.split(',').map(ing => ing.trim()) })}
-            required
-          />
+          <textarea id="ingredients" name="ingredients" value={recipe.ingredients.join(', ')} onChange={handleIngredientsChange} required />
         </div>
         <button type="submit">Cadastrar Receita</button>
       </form>
+      <ToastContainer />
     </div>
   );
 };
